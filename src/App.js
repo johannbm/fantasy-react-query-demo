@@ -1,12 +1,12 @@
-import './App.css';
-import React, {useEffect, useState} from "react";
-import {QueryClient, QueryClientProvider} from "react-query";
-import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import AllPlayersTable from "./AllPlayersTable";
 import Player from "./Player";
-import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from "react-query/devtools";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
@@ -27,8 +27,5 @@ export default function App() {
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-
   );
 }
-
-
