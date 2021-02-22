@@ -1,17 +1,11 @@
 import React, {useEffect, useState} from "react";
+import {useQuery} from "react-query";
+import {Link} from "react-router-dom";
 
 export default function AllPlayersTable() {
-  const [loading, setLoading]  = useState(false);
-  const [players, setPlayers] = useState([]);
+  const fetchAllPlayersQuery = useQuery("allPlayers", fetchStats);
 
-  useEffect(async () => {
-    setLoading(true);
-    const players = await fetchStats();
-    setPlayers(players);
-    setLoading(false);
-  }, [])
-
-  if (loading) {
+  if (fetchAllPlayersQuery.isLoading) {
     return "...laster";
   }
 
@@ -24,9 +18,9 @@ export default function AllPlayersTable() {
       </tr>
       </thead>
       <tbody>
-      {players.map(player => (
+      {fetchAllPlayersQuery.data.map(player => (
         <tr>
-          <a href={`/player/${player.id}`}>{player.player_name}</a>
+          <Link to={`/player/${player.id}`}>{player.player_name}</Link>
           <td>{player.goals}</td>
         </tr>
       ))}

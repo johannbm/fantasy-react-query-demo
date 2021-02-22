@@ -1,21 +1,14 @@
 import React, {useEffect, useState} from "react";
+import {useQuery} from "react-query";
 import {useParams} from "react-router-dom";
 
 export default function Player() {
   let { id } = useParams();
 
-  const [loading, setLoading]  = useState(false);
-  const [matches, setMatches] = useState([]);
+  const fetchPlayerQuery = useQuery(["fetchPlayer", id], () => fetchPlayer(id))
 
-  useEffect(async () => {
-    setLoading(true);
-    const player = await fetchPlayer(id);
-    setMatches(player);
-    setLoading(false);
-  }, [])
-
-  if (loading) {
-    return "...laster";
+  if (fetchPlayerQuery.isLoading) {
+    return "..Laster";
   }
 
   return (
@@ -30,7 +23,7 @@ export default function Player() {
       </tr>
       </thead>
       <tbody>
-      {matches.map(match => (
+      {fetchPlayerQuery.data.map(match => (
         <tr>
           <td style={{textAlign: "left"}}>{match.h_team}({match.h_goals}) - {match.a_team}({match.a_goals})</td>
           <td>{Number(match.xG).toFixed(2)}</td>
