@@ -1,32 +1,34 @@
 import './App.css';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import AllPlayersTable from "./AllPlayersTable";
+import Player from "./Player";
+import { ReactQueryDevtools } from 'react-query/devtools'
 
-
+const queryClient = new QueryClient()
 
 export default function App() {
-  const [loading, setLoading]  = useState(false);
-  const [data, setData] = useState([]);
-
-  useEffect(async () => {
-    setLoading(true);
-    const data = await fetchStats();
-    setData(data);
-  }, [])
-
   return (
-    <div className="App">
-      <header className="App-header">
-        {data.map(d => {
-          <div>{d}</div>
-        })}
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <div className="App">
+          <header className="App-header">
+            <Switch>
+              <Route path="/player/:id">
+                <Player />
+              </Route>
+              <Route path="/">
+                <AllPlayersTable />
+              </Route>
+            </Switch>
+          </header>
+        </div>
+      </Router>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+
   );
 }
 
-const API_URL = "https://3hg93n5vqg.execute-api.eu-north-1.amazonaws.com/test/league-players";
-async function fetchStats() {
-  const res = await fetch(API_URL);
-  console.log(res);
-  return res.json();
-}
+
