@@ -19,13 +19,36 @@ export default function AllPlayersTable() {
       </thead>
       <tbody>
         {fetchAllPlayersQuery.data.map((player) => (
-          <tr>
-            <Link to={`/player/${player.id}`}>{player.player_name}</Link>
-            <td>{player.goals}</td>
-          </tr>
+          <Player key={player.id} player={player} />
         ))}
       </tbody>
     </table>
+  );
+}
+
+function Player({ player }) {
+  const [goals, setGoals] = useState(player.goals);
+
+  const handleBlur = async () => {
+    await fetch("/api/players/" + player.id, {
+      method: "POST",
+      body: JSON.stringify({ ...player, goals }),
+    });
+  };
+
+  return (
+    <tr>
+      <td>
+        <Link to={`/player/${player.id}`}>{player.player_name}</Link>
+      </td>
+      <td>
+        <input
+          onBlur={handleBlur}
+          value={goals}
+          onChange={(e) => setGoals(e.target.value)}
+        />
+      </td>
+    </tr>
   );
 }
 
